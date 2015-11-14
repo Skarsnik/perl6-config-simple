@@ -15,12 +15,18 @@ The module depend on `Data::Dump` for the default format.
 
 `JSON::Pretty`for JSON
 
+## Change the format
+
+The `new` and `read` methods take an additionnal argument to specify the format of the config file.
+
+It's the `f` parameter. Like `.new(f<ini>)` will say to save using the "ini" format.
+
 
 ## Example
 
 ```perl
 my $conf = Config::Simple.new #Provide a default format
-#my $conf = Config::Simple.new(:b('ini')) #if you want to use a ini file;
+#my $conf = Config::Simple.new(:f<ini>) #if you want to use a ini file;
 $conf.filename = "myconf.conf";
 
 $conf<video><title> = "Dune"
@@ -32,16 +38,16 @@ $conf.write("mycopyconf.con"); # you can also specify another file
 
 # to read from an already existing file
 
-$conf = Config::Simple.read("myconf.conf") # or .read("myconf.conf", :b("ini"))
+$conf = Config::Simple.read("myconf.conf") # or .read("myconf.conf", :f<ini>))
 say $conf<video><title>; #Dune
 
 ```
 
 ## Formats
 
-For now, the only available formats are `ini` and `JSON` the case is important since it try to load the Config::Simple::<format> module.
+For now, the only available formats are `ini` and `JSON` the case is important since it try to load the Config::Simple::format module.
 
-For `ini` format provide a _ key for the root. `$conf<_><something>` to read stuff not put in a section
+The `ini` format provide a _ key for the root. `$conf<_><something>` to read stuff not put in a section
 
 ## Writting a new format module
 
