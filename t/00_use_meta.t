@@ -1,5 +1,11 @@
+use v6;
+use lib 'lib';
 use Test;
-plan 1;
-use Test::META;
+constant AUTHOR = ?%*ENV<TEST_AUTHOR>; 
 
-meta-ok();
+if AUTHOR { 
+    require Test::META <&meta-ok>;
+    plan 1;
+    meta-ok;
+    done-testing;
+}
