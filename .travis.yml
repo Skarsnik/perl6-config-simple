@@ -17,7 +17,8 @@ before_install:
     - perl6 -v
 install:
     # must do *something* in the install phase
-    - rakudobrew build-panda
+    #- rakudobrew build-panda
+    - rakudobrew build panda
 script:
     # Pull in the dependencies before running tests
     - panda installdeps .
