@@ -2,16 +2,9 @@ language: perl6
 perl6:
     - latest
 install:
-    # must do *something* in the install phase
     - rakudobrew build panda
-    - panda
     # Pull in the dependencies before running tests
     - panda installdeps .
-script:
-    # tests that module passes tests *before* compile
-    - PERL6LIB=$PWD/lib prove -e perl6 -r t/
-    # runs tests again, but catches some heisenbugs (mostly with precompiled modules)
-    - PANDA_SUBMIT_TESTREPORTS=1 panda install .
 after_success:
     - panda --installed --verbose list
 sudo: false
