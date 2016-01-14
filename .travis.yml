@@ -1,32 +1,36 @@
-language: perl
-perl:
-    - '5.20'
-env:
-    - BACKEND=moar
-    - BACKEND=jvm
-matrix:
-    allow_failures:
-        - env: BACKEND=jvm
-before_install:
-    # helpers $(test-jobs) and $(test-files)
-    - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
-    - source ~/travis-perl-helpers/init
-    - git clone -b compat https://github.com/tadzik/rakudobrew ~/.rakudobrew
-    - export PATH=~/.rakudobrew/bin:$PATH
-    - rakudobrew build $BACKEND
-    - which perl6
-    - perl6 -v
-    - rakudobrew build panda
-    - which panda
-    - panda
+language: perl6
+perl6:
+    - latest
+#env:
+#    - BACKEND=moar
+#    - BACKEND=jvm
+#matrix:
+#    allow_failures:
+#        - env: BACKEND=jvm
+# before_install:
+#     # helpers $(test-jobs) and $(test-files)
+#     - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+#     - source ~/travis-perl-helpers/init
+#     - git clone -b compat https://github.com/tadzik/rakudobrew ~/.rakudobrew
+#     - export PATH=~/.rakudobrew/bin:$PATH
+#     - rakudobrew build $BACKEND
+#     - which perl6
+#     - perl6 -v
+#     - rakudobrew build panda
+#     - which panda
+#     - panda
 install:
     # must do *something* in the install phase
     # Pull in the dependencies before running tests
+    - rakudobrew build panda
+    - panda
     - panda installdeps .
 script:
     # tests that module passes tests *before* compile
-    - prove -v -j$(test-jobs) -e "perl6 --ll-exception -Ilib" $(test-files)
+    - PERL6LIB=$PWD/lib prove -e perl6 -r t/
+#    - prove -v -j$(test-jobs) -e "perl6 --ll-exception -Ilib" $(test-files)
     # runs tests again, but catches some heisenbugs (mostly with precompiled modules)
     - PANDA_SUBMIT_TESTREPORTS=1 panda install .
 after_success:
     - panda list --installed --verbose
+sudo: false
